@@ -1,0 +1,33 @@
+baseURL = "https://example-github-pages-2022.github.io/"
+defaultContentLanguage = "en"
+defaultContentLanguageInSubdir = false
+enableEmoji = true
+enableGitInfo = true
+#enableRobotsTXT = true
+#googleAnalytics = "<REPLACE_HERE>"
+hasCJKLanguage = true
+languageCode = "en-us"
+pygmentsCodeFences = true
+pygmentsStyle = "friendly"
+title = "example-github-pages-2022.github.io"
+theme = "techlog-simple"
+
+[languages]
+[languages.en]
+weight = 1
+languageName = "English"
+
+[languages.ja]
+weight = 10
+languageName = "日本語"
+
+[params]
+description = "A Tech Blog Example"
+
+[params.sns]
+github = "octocat"
+twitter = "twitter"
+
+[taxonomies]
+category = "categories"
+tag = "tags"

@@ -1,0 +1,45 @@
+name: publish-to-github-pages
+
+on:
+  push:
+  schedule:
+    - cron: "0 0 1 * *"
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/mazgi/hugo-static-website
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+      - uses: actions/checkout@v2
+        with:
+          repository: example-github-pages-2022/example-github-pages-2022.github.io
+          token: ${{ secrets.TOKEN_READ_WRITE_REPOS }}
+          path: public
+      - run: git rm -rf .
+        working-directory: public
+      # - run: >
+      #     sed -i -e
+      #     's/^\s*#\s*googleAnalytics\s*=\s*.*$/googleAnalytics
+      #     = "'${GOOGLE_ANALYTICS_TRACKING_ID}'"/'
+      #     config.toml
+      #   env:
+      #     GOOGLE_ANALYTICS_TRACKING_ID: ${{ secrets.GOOGLE_ANALYTICS_TRACKING_ID }}
+      - run: hugo
+      - run: |
+          git config --global user.email push-from-github-actions@example.com
+          git config --global user.name push-from-github-actions
+          git add --all
+          git commit --message \
+          "Commit by GitHub Actions.
+          ref: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/commit/${GITHUB_SHA}" \
+          || true
+        working-directory: public
+      - run: git push https://${token}@github.com/example-github-pages-2022/example-github-pages-2022.github.io.git main || true
+        env:
+          token: ${{ secrets.TOKEN_READ_WRITE_REPOS }}
+        working-directory: public
+        if: github.ref == 'refs/heads/main'
